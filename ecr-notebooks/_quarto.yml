@@ -1,0 +1,47 @@
+project:
+  type: website
+
+website:
+  navbar:
+    left:
+      - href: index.qmd
+        text: "<img src='images/EcoCommons Logo White.png' alt='EcoCommons Logo' style='height:45px; vertical-align: middle; margin-right: 10px;'> <span style='font-size: 30px; position: relative; top: 7px;'>EcoNotebooks</span>"
+    right:  
+      - text: SDMs
+        menu:
+          - href: dataprep.qmd
+            text: Data Preparation
+          - href: modelling.qmd
+            text: Modelling
+          - href: predicting.qmd
+            text: Prediction
+          - href: evaluation.qmd
+            text: Evaluation
+      - text: Models
+        menu:
+          - href: glm.qmd
+            text: GLM
+          - href: maxent.qmd
+            text: Maxent
+      - text: Visualisation
+        menu:
+          - href: visual1.qmd
+            text: Visualisation 1
+          - href: visual2.qmd
+            text: Visualisation 2
+      - text: Spatial Prioritization
+        menu:
+          - href: sp/ecocommons-marxan-integration-poc.qmd
+            text: Connecting Marxan
+          - href: SP2.qmd
+            text: SP2
+      - href: about.qmd
+        text: About
+
+format:
+  html:
+    css: ec_html_template.css
+    toc: true
+    include-after-body: footer.html
+
+editor: visual
