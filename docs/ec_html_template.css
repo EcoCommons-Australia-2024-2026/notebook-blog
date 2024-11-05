@@ -108,7 +108,7 @@ table th {
 header {
   background-size: cover;
   background-position: center;
-  height: 20px; /* Adjust the height to avoid overlap */
+  height: 120px; /* Adjust the height to avoid overlap */
   width: 100%;
   padding: 20px; /* Add padding to ensure text does not overlap */
   margin-bottom: 50px; /* Push the content below the header */
