@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.5.57">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>raster_preparation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="../ec_html_template.css">
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text"><img src="https://raw.githubusercontent.com/EcoCommons-Australia-2024-2026/ec-notebook_site/main/images/EcoCommons%20Logo%20White.png" alt="EcoCommons Logo" style="height:45px; vertical-align: middle; margin-right: 10px;"> <span style="font-size: 30px; position: relative; top: 7px;">EcoNotebooks</span></span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-sdms" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">SDMs</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-sdms">    
+        <li>
+    <a class="dropdown-item" href="../sdms/dataprep.html">
+ <span class="dropdown-text">Data Preparation</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sdms/modelling.qmd">
+ <span class="dropdown-text">Modelling</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sdms/predicting.qmd">
+ <span class="dropdown-text">Prediction</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sdms/evaluation.qmd">
+ <span class="dropdown-text">Evaluation</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-models" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Models</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-models">    
+        <li>
+    <a class="dropdown-item" href="../models/EC_GLM.html">
+ <span class="dropdown-text">GLM</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../models/maxent.qmd">
+ <span class="dropdown-text">Maxent</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-visualisation" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Visualisation</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-visualisation">    
+        <li>
+    <a class="dropdown-item" href="../visual/visual1.qmd">
+ <span class="dropdown-text">Visualisation 1</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../visual/visual2.qmd">
+ <span class="dropdown-text">Visualisation 2</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-spatial-prioritization" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Spatial Prioritization</span>
+    </a>
+    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="nav-menu-spatial-prioritization">    
+        <li>
+    <a class="dropdown-item" href="../sp/ecocommons-marxan-integration-poc.html">
+ <span class="dropdown-text">Connecting Marxan</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../sp/SP2.qmd">
+ <span class="dropdown-text">SP2</span></a>
+  </li>  
+    </ul>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#species-distribution-analysis---environmental-data-preparation-raster" id="toc-species-distribution-analysis---environmental-data-preparation-raster" class="nav-link active" data-scroll-target="#species-distribution-analysis---environmental-data-preparation-raster">Species Distribution Analysis - Environmental Data Preparation (Raster)</a></li>
+  <li><a href="#script-and-data-info" id="toc-script-and-data-info" class="nav-link" data-scroll-target="#script-and-data-info">Script and data info:</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link" data-scroll-target="#introduction">Introduction</a>
+  <ul class="collapse">
+  <li><a href="#environmental-variables" id="toc-environmental-variables" class="nav-link" data-scroll-target="#environmental-variables">1. Environmental variables</a></li>
+  <li><a href="#raster" id="toc-raster" class="nav-link" data-scroll-target="#raster">2. Raster</a></li>
+  <li><a href="#categorical-and-continuous-data" id="toc-categorical-and-continuous-data" class="nav-link" data-scroll-target="#categorical-and-continuous-data">3. Categorical and Continuous data</a></li>
+  </ul></li>
+  <li><a href="#practice" id="toc-practice" class="nav-link" data-scroll-target="#practice">Practice</a>
+  <ul class="collapse">
+  <li><a href="#set-working-directory-and-make-a-folder-to-store-data." id="toc-set-working-directory-and-make-a-folder-to-store-data." class="nav-link" data-scroll-target="#set-working-directory-and-make-a-folder-to-store-data.">1. Set working directory and make a folder to store data.</a></li>
+  <li><a href="#install-and-load-essential-libraries." id="toc-install-and-load-essential-libraries." class="nav-link" data-scroll-target="#install-and-load-essential-libraries.">2. Install and load essential libraries.</a></li>
+  <li><a href="#download-environmental-data" id="toc-download-environmental-data" class="nav-link" data-scroll-target="#download-environmental-data">3. Download Environmental Data</a></li>
+  <li><a href="#load-and-process-environmental-data" id="toc-load-and-process-environmental-data" class="nav-link" data-scroll-target="#load-and-process-environmental-data">4. Load and Process Environmental Data</a></li>
+  <li><a href="#download-and-load-australian-boundary-shapefile" id="toc-download-and-load-australian-boundary-shapefile" class="nav-link" data-scroll-target="#download-and-load-australian-boundary-shapefile">5. Download and Load Australian Boundary Shapefile</a></li>
+  <li><a href="#plot-australian-boundary" id="toc-plot-australian-boundary" class="nav-link" data-scroll-target="#plot-australian-boundary">6. Plot Australian Boundary</a></li>
+  <li><a href="#show-resolution-extent-and-crs-of-raster-and-study-area" id="toc-show-resolution-extent-and-crs-of-raster-and-study-area" class="nav-link" data-scroll-target="#show-resolution-extent-and-crs-of-raster-and-study-area">7. Show Resolution, Extent, and CRS of Raster and Study Area</a></li>
+  <li><a href="#reproject-raster-to-wgs-84-if-needed" id="toc-reproject-raster-to-wgs-84-if-needed" class="nav-link" data-scroll-target="#reproject-raster-to-wgs-84-if-needed">8. Reproject Raster to WGS 84 if Needed</a></li>
+  <li><a href="#resample-rasters-to-match-the-finest-resolution" id="toc-resample-rasters-to-match-the-finest-resolution" class="nav-link" data-scroll-target="#resample-rasters-to-match-the-finest-resolution">9. Resample Rasters to Match the Finest Resolution</a></li>
+  <li><a href="#crop-and-mask-raster-to-study-area" id="toc-crop-and-mask-raster-to-study-area" class="nav-link" data-scroll-target="#crop-and-mask-raster-to-study-area">10. Crop and Mask Raster to Study Area</a></li>
+  <li><a href="#stack-and-save-raster" id="toc-stack-and-save-raster" class="nav-link" data-scroll-target="#stack-and-save-raster">11. Stack and Save Raster</a></li>
+  </ul></li>
+  <li><a href="#how-to-cite-ecocommons" id="toc-how-to-cite-ecocommons" class="nav-link" data-scroll-target="#how-to-cite-ecocommons"><strong>How to Cite EcoCommons</strong></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+
+<p><img src="https://raw.githubusercontent.com/EcoCommons-Australia-2024-2026/ec-notebook_site/main/images/notebooks_banner_withframe.png" class="img-fluid"></p>
+<section id="species-distribution-analysis---environmental-data-preparation-raster" class="level1">
+<h1>Species Distribution Analysis - Environmental Data Preparation (Raster)</h1>
+<p>Author details: Xiang Zhao</p>
+<p>Editor details: Contact details: support@ecocommons.org.au</p>
+<p>Copyright statement: This script is the product of the EcoCommons platform. Please refer to the EcoCommons website for more details: <a href="https://www.ecocommons.org.au/" class="uri">https://www.ecocommons.org.au/</a></p>
+</section>
+<section id="script-and-data-info" class="level1">
+<h1>Script and data info:</h1>
+<p>This notebook, developed by the EcoCommons team, showcases how to download, and process both continuous and categorical environmental dataset that in the format of raster to be used for SDM.</p>
+<p><strong>Workflow Overview</strong>:</p>
+<ul>
+<li><p>Initial Setup: Set the working directory and load necessary R packages (dismo, ggplot2, raster, googledrive, sp, dplyr, terra). Create directories to store raw data files.</p></li>
+<li><p>Data Download: Download continuous environmental dataset from WorldClim. Download categorical environmental dataset from our Google Drive.</p></li>
+<li><p>Data Processing: Reproject environmental datasets to the crs your desire. Crop and mask environmental dataset to the extent of your study area. Resample environmental dataset to a same resolution.</p></li>
+</ul>
+<p>In the near future, this material may form part of comprehensive support materials available to EcoCommons users.</p>
+<p>If you have any corrections or suggestions to improve the effeciengy, please <a href="mailto:support@ecocommons.org.au">contact the EcoCommons</a> team.</p>
+<p><img src="https://raw.githubusercontent.com/EcoCommons-Australia-2024-2026/ec-notebook_site/main/images/EC_section_break.png" class="img-fluid"></p>
+</section>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<section id="environmental-variables" class="level2">
+<h2 class="anchored" data-anchor-id="environmental-variables">1. Environmental variables</h2>
+<p>In Species Distribution Modeling (SDM), <strong>environmental variables</strong> are factors that influence where a species can live. These include:</p>
+<ul>
+<li><p><strong>Climatic Variables</strong>: Temperature, precipitation.</p></li>
+<li><p><strong>Topographic Variables</strong>: Elevation, slope.</p></li>
+<li><p><strong>Soil Variables</strong>: Soil pH, texture.</p></li>
+<li><p><strong>Vegetation Variables</strong>: Land cover type, canopy cover.</p></li>
+<li><p><strong>Hydrological Variables</strong>: Distance to water bodies, soil moisture.</p></li>
+<li><p><strong>Biotic Variables</strong>: Presence of prey, competitors.</p></li>
+<li><p><strong>Anthropogenic Variables</strong>: Land use, human impact.</p></li>
+</ul>
+<p>These variables help explain and predict a species’ habitat suitability based on environmental conditions.</p>
+</section>
+<section id="raster" class="level2">
+<h2 class="anchored" data-anchor-id="raster">2. Raster</h2>
+<p><strong>Raster data</strong> is a type of spatial data used to represent continuous surfaces, like environmental layers (e.g., elevation, temperature) in grids or cells. Each cell (pixel) has a value that represents information about that area.</p>
+<p><strong>Important Characteristics</strong>:</p>
+<ul>
+<li><p><strong>Resolution</strong>: Size of each cell, determining data detail (e.g., 10m x 10m cells).</p></li>
+<li><p><strong>Extent</strong>: Geographic area covered by the raster.</p></li>
+<li><p><strong>Coordinate Reference System (CRS)</strong>: Defines the spatial reference of the raster for location accuracy.</p></li>
+<li><p><strong>Data Type</strong>: Can be <strong>continuous</strong> (e.g., temperature) or <strong>categorical</strong> (e.g., land cover type).</p></li>
+</ul>
+<p>These characteristics impact how raster data is interpreted and used in analyses like SDM.</p>
+<p><strong>To make extract the value of raster data, we always want our raster data has the same resolution, extend, and CRS.</strong></p>
+</section>
+<section id="categorical-and-continuous-data" class="level2">
+<h2 class="anchored" data-anchor-id="categorical-and-continuous-data">3. Categorical and Continuous data</h2>
+<p>In environmental modeling, <strong>environmental variables</strong> can be classified as <strong>categorical</strong> or <strong>continuous</strong>:</p>
+<p><strong>Categorical Data</strong></p>
+<ul>
+<li><p>Represents discrete classes or categories.</p></li>
+<li><p><strong>Examples</strong>:</p>
+<ul>
+<li><p><strong>Land Cover Type</strong>: Forest, grassland, urban.</p></li>
+<li><p><strong>Soil Type</strong>: Sandy, clay, loam.</p></li>
+<li><p><strong>Vegetation Type</strong>: Different plant communities.</p></li>
+</ul></li>
+</ul>
+<p><strong>Continuous Data</strong></p>
+<ul>
+<li><p>Represents data with a smooth gradient, measurable values.</p></li>
+<li><p><strong>Examples</strong>:</p>
+<ul>
+<li><p><strong>Temperature</strong>: Annual mean temperature.</p></li>
+<li><p><strong>Precipitation</strong>: Monthly or annual rainfall.</p></li>
+<li><p><strong>Elevation</strong>: Height above sea level in meters.</p></li>
+</ul></li>
+</ul>
+<p>Categorical data is useful for distinct classifications, while continuous data is used for variables that change gradually across the landscape. Both types are important for predicting species distributions.</p>
+<p><img src="https://raw.githubusercontent.com/EcoCommons-Australia-2024-2026/ec-notebook_site/main/images/EC_section_break.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="practice" class="level1">
+<h1>Practice</h1>
+<section id="set-working-directory-and-make-a-folder-to-store-data." class="level2">
+<h2 class="anchored" data-anchor-id="set-working-directory-and-make-a-folder-to-store-data.">1. Set working directory and make a folder to store data.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set Workspace as the current working directory</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>workspace <span class="ot">&lt;-</span> <span class="fu">getwd</span>()</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Define directory for storing environmental data</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>env_data_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(workspace, <span class="st">"env_data"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Create 'env_data' directory if it doesn't exist</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">dir.exists</span>(env_data_dir)) {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dir.create</span>(env_data_dir, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Directory 'env_data' created successfully.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Directory 'env_data' already exists.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Directory 'env_data' already exists.</code></pre>
+</div>
+</div>
+</section>
+<section id="install-and-load-essential-libraries." class="level2">
+<h2 class="anchored" data-anchor-id="install-and-load-essential-libraries.">2. Install and load essential libraries.</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># List of packages to check, install if needed, and load</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>packages <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"dplyr"</span>, <span class="st">"terra"</span>, <span class="st">"sf"</span>, <span class="st">"googledrive"</span>, <span class="st">"ggplot2"</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Install missing packages and load them</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (pkg <span class="cf">in</span> packages) {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span>pkg <span class="sc">%in%</span> <span class="fu">installed.packages</span>()[, <span class="st">"Package"</span>]) {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(pkg)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(pkg, <span class="at">character.only =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>terra 1.7.78</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Linking to GEOS 3.11.0, GDAL 3.5.3, PROJ 9.1.0; sf_use_s2() is TRUE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># De-authenticate Google Drive to access public files</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">drive_deauth</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="download-environmental-data" class="level2">
+<h2 class="anchored" data-anchor-id="download-environmental-data">3. Download Environmental Data</h2>
+<p>Environmental variables are downloaded from both WorldClim and Google Drive, and stored in GeoTIFF format.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googledrive)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">drive_deauth</span>()  <span class="co"># Access public files without authentication</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Define Google Drive file IDs and corresponding local file paths for environmental variables</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>file_ids <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_1 =</span> <span class="st">"1EA_lberXjNI3_RRM0mbAdDvVDTFL2tW3"</span>, <span class="co"># Continuous Environmental Variable 1, Bioclim 01</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_2 =</span> <span class="st">"1PO1TAQp-ND4olSgIQ29wjexMOQnhXkku"</span>, <span class="co"># Continuous Environmental Variable 2, Bioclim 02</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_3 =</span> <span class="st">"1BSEuphUV-qqR-gnA9HPZ1qKGLyJfLagC"</span>, <span class="co"># Continuous Environmental Variable 3, Bioclim 03</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_4 =</span> <span class="st">"1fCI5D_AGg2nhU75A-9WX7MspcrQYMp7f"</span>, <span class="co"># Continuous Environmental Variable 4, Bioclim 04</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_5 =</span> <span class="st">"1yWmJ9fKFPZQoV_XTRIWABV_gaF-wexzZ"</span>, <span class="co"># Continuous Environmental Variable 5, Bioclim 05</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_cat_1 =</span> <span class="st">"1WzBKghFdG67C_LMeOmi9a1A12wjrd9wo"</span> <span class="co"># Categorical Environmental Variable 1, Land use of Australia</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Define local file paths for each environmental variable</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>file_paths <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_1 =</span> <span class="fu">file.path</span>(workspace, <span class="st">"env_data"</span>, <span class="st">"env_var_1.tif"</span>),</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_2 =</span> <span class="fu">file.path</span>(workspace, <span class="st">"env_data"</span>, <span class="st">"env_var_2.tif"</span>),</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_3 =</span> <span class="fu">file.path</span>(workspace, <span class="st">"env_data"</span>, <span class="st">"env_var_3.tif"</span>),</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_4 =</span> <span class="fu">file.path</span>(workspace, <span class="st">"env_data"</span>, <span class="st">"env_var_4.tif"</span>),</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_5 =</span> <span class="fu">file.path</span>(workspace, <span class="st">"env_data"</span>, <span class="st">"env_var_5.tif"</span>),</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">env_var_cat_1 =</span> <span class="fu">file.path</span>(workspace, <span class="st">"env_data"</span>, <span class="st">"env_var_cat_1.tif"</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to download individual files with progress messages</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>download_file <span class="ot">&lt;-</span> <span class="cf">function</span>(file_id, file_path) {</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Downloading:"</span>, <span class="fu">basename</span>(file_path), <span class="st">"...</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drive_download</span>(<span class="fu">as_id</span>(file_id), <span class="at">path =</span> file_path, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Downloaded:"</span>, <span class="fu">basename</span>(file_path), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a><span class="co"># Download each environmental variable file</span></span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Downloading environmental variable files...</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading environmental variable files...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">invisible</span>(<span class="fu">mapply</span>(download_file, file_ids, file_paths))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading: env_var_1.tif ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'wc2.1_2.5m_bioclim_01.tif' &lt;id: 1EA_lberXjNI3_RRM0mbAdDvVDTFL2tW3&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/env_var_1.tif'</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloaded: env_var_1.tif 
+Downloading: env_var_2.tif ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'wc2.1_2.5m_bioclim_02.tif' &lt;id: 1PO1TAQp-ND4olSgIQ29wjexMOQnhXkku&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/env_var_2.tif'</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloaded: env_var_2.tif 
+Downloading: env_var_3.tif ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'wc2.1_2.5m_bioclim_03.tif' &lt;id: 1BSEuphUV-qqR-gnA9HPZ1qKGLyJfLagC&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/env_var_3.tif'</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloaded: env_var_3.tif 
+Downloading: env_var_4.tif ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'wc2.1_2.5m_bioclim_04.tif' &lt;id: 1fCI5D_AGg2nhU75A-9WX7MspcrQYMp7f&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/env_var_4.tif'</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloaded: env_var_4.tif 
+Downloading: env_var_5.tif ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'wc2.1_2.5m_bioclim_05.tif' &lt;id: 1yWmJ9fKFPZQoV_XTRIWABV_gaF-wexzZ&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/env_var_5.tif'</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloaded: env_var_5.tif 
+Downloading: env_var_cat_1.tif ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'land_use_Australia_6class_cat.tif' &lt;id: 1WzBKghFdG67C_LMeOmi9a1A12wjrd9wo&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/env_var_cat_1.tif'</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloaded: env_var_cat_1.tif </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Confirm the files have been downloaded</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>downloaded_files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(<span class="fu">file.path</span>(workspace, <span class="st">"env_data"</span>), <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Downloaded files:</span><span class="sc">\n</span><span class="st">"</span>, downloaded_files, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloaded files:
+ aus_shapefile/AUS_2021_AUST_GDA2020.dbf aus_shapefile/AUS_2021_AUST_GDA2020.prj aus_shapefile/AUS_2021_AUST_GDA2020.shp aus_shapefile/AUS_2021_AUST_GDA2020.shx aus_shapefile/AUS_2021_AUST_GDA2020.xml env_var_1.tif env_var_2.tif env_var_3.tif env_var_4.tif env_var_5.tif env_var_cat_1.tif </code></pre>
+</div>
+</div>
+</section>
+<section id="load-and-process-environmental-data" class="level2">
+<h2 class="anchored" data-anchor-id="load-and-process-environmental-data">4. Load and Process Environmental Data</h2>
+<p>All raster files are loaded and reprojected if necessary to ensure consistency.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load all rasters and store in a list</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>rasters <span class="ot">&lt;-</span> <span class="fu">lapply</span>(file_paths, rast)</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Sometimes, when you upload a raster file (such as a GeoTIFF) to Google Drive and then open it in Google Colab, it may lose its categorical (factor) properties due to how terra or other spatial libraries interpret the file upon reloading. Rasters saved as categorical may be stored with integer values rather than explicit factor levels in the file, meaning they need to be redefined as factors when reloaded.</span></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>rasters[[<span class="dv">6</span>]] <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(rasters[[<span class="dv">6</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Check if each raster is categorical or continuous</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(rasters)) {</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.factor</span>(rasters[[i]])) {</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"Raster"</span>, i, <span class="st">"is categorical.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(<span class="st">"Raster"</span>, i, <span class="st">"is continuous.</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Raster 1 is continuous.
+Raster 2 is continuous.
+Raster 3 is continuous.
+Raster 4 is continuous.
+Raster 5 is continuous.
+Raster 6 is categorical.</code></pre>
+</div>
+</div>
+</section>
+<section id="download-and-load-australian-boundary-shapefile" class="level2">
+<h2 class="anchored" data-anchor-id="download-and-load-australian-boundary-shapefile">5. Download and Load Australian Boundary Shapefile</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(googledrive)</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co"># De-authenticate Google Drive to access public files</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">drive_deauth</span>()</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Folder ID for the Australian polygon shapefile</span></span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>aus_folder_id <span class="ot">&lt;-</span> <span class="st">"1rzNHthnQQXVulocKkB5i7v2dObqKMP11"</span></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the local directory to save the shapefile components</span></span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>shapefile_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(workspace, <span class="st">"env_data"</span>, <span class="st">"aus_shapefile"</span>)</span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(shapefile_dir, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a><span class="co"># List all files in the shapefile folder on Google Drive</span></span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>files_in_folder <span class="ot">&lt;-</span> <span class="fu">drive_ls</span>(<span class="fu">as_id</span>(aus_folder_id))</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Download each file in the folder</span></span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Downloading shapefile components...</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading shapefile components...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(files_in_folder)) {</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>  file_name <span class="ot">&lt;-</span> files_in_folder<span class="sc">$</span>name[i]</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Downloading:"</span>, file_name, <span class="st">"...</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">drive_download</span>(files_in_folder<span class="sc">$</span>id[i], <span class="at">path =</span> <span class="fu">file.path</span>(shapefile_dir, file_name), <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading: AUS_2021_AUST_GDA2020.xml ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'AUS_2021_AUST_GDA2020.xml' &lt;id: 1BxMyIxENdWJ2RiZxK_8Ay_0r2Uvad5Wd&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/aus_shapefile/AUS_2021_AUST_GDA2020.xml'</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading: AUS_2021_AUST_GDA2020.shx ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'AUS_2021_AUST_GDA2020.shx' &lt;id: 1wfSxFsmgK4V44f4ZJhYy3V6wL16YpVWe&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/aus_shapefile/AUS_2021_AUST_GDA2020.shx'</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading: AUS_2021_AUST_GDA2020.dbf ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'AUS_2021_AUST_GDA2020.dbf' &lt;id: 1gdWxQ5aOB_KuejlHn254K7RwdtDR2N8f&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/aus_shapefile/AUS_2021_AUST_GDA2020.dbf'</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading: AUS_2021_AUST_GDA2020.prj ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'AUS_2021_AUST_GDA2020.prj' &lt;id: 1Fi9K9mWOpvksSkH0CGJN9XlKf8-1LjSj&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/aus_shapefile/AUS_2021_AUST_GDA2020.prj'</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Downloading: AUS_2021_AUST_GDA2020.shp ...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>File downloaded:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• 'AUS_2021_AUST_GDA2020.shp' &lt;id: 1ZWGQYHbygM-MCFyON76FXwj7uHwJnpxH&gt;</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Saved locally as:</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>• '/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/aus_shapefile/AUS_2021_AUST_GDA2020.shp'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Shapefile components downloaded to:"</span>, shapefile_dir, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Shapefile components downloaded to: /Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/aus_shapefile </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Load necessary library for handling shapefiles</span></span>
+<span id="cb80-2"><a href="#cb80-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb80-3"><a href="#cb80-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-4"><a href="#cb80-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the shapefile using the components in the downloaded directory</span></span>
+<span id="cb80-5"><a href="#cb80-5" aria-hidden="true" tabindex="-1"></a>shapefile_path <span class="ot">&lt;-</span> <span class="fu">list.files</span>(shapefile_dir, <span class="at">pattern =</span> <span class="st">"</span><span class="sc">\\</span><span class="st">.shp$"</span>, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb80-6"><a href="#cb80-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb80-7"><a href="#cb80-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Load the Australian boundary as an sf object and convert to EPSG 4326</span></span>
+<span id="cb80-8"><a href="#cb80-8" aria-hidden="true" tabindex="-1"></a>australia_boundary <span class="ot">&lt;-</span> <span class="fu">st_read</span>(shapefile_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Reading layer `AUS_2021_AUST_GDA2020' from data source 
+  `/Users/zhaoxiang/Documents/tmp/test/notebook-blog/sdms/env_data/aus_shapefile/AUS_2021_AUST_GDA2020.shp' 
+  using driver `ESRI Shapefile'
+replacing null geometries with empty geometries
+Simple feature collection with 2 features and 6 fields (with 1 geometry empty)
+Geometry type: MULTIPOLYGON
+Dimension:     XY
+Bounding box:  xmin: 96.81695 ymin: -43.7405 xmax: 167.998 ymax: -9.142163
+Geodetic CRS:  GDA2020</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>australia_boundary <span class="ot">&lt;-</span> <span class="fu">st_transform</span>(australia_boundary, <span class="at">crs =</span> <span class="dv">4326</span>)</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(australia_boundary)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "sf"         "data.frame"</code></pre>
+</div>
+</div>
+</section>
+<section id="plot-australian-boundary" class="level2">
+<h2 class="anchored" data-anchor-id="plot-australian-boundary">6. Plot Australian Boundary</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> australia_boundary) <span class="sc">+</span></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_sf</span>(<span class="at">fill =</span> <span class="st">"#61c6fa"</span>, <span class="at">color =</span> <span class="st">"black"</span>) <span class="sc">+</span>  <span class="co"># Fill with light blue and outline in black</span></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Map of Australia"</span>) <span class="sc">+</span></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span></span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">plot.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">18</span>, <span class="at">face =</span> <span class="st">"bold"</span>),</span>
+<span id="cb84-8"><a href="#cb84-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb84-9"><a href="#cb84-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.title.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb84-10"><a href="#cb84-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb84-11"><a href="#cb84-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">axis.text.y =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb84-12"><a href="#cb84-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.title =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb84-13"><a href="#cb84-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">12</span>),</span>
+<span id="cb84-14"><a href="#cb84-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.border =</span> <span class="fu">element_rect</span>(<span class="at">colour =</span> <span class="st">"gray"</span>, <span class="at">fill =</span> <span class="cn">NA</span>, <span class="at">linewidth =</span> <span class="fl">0.5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="raster_preparation_files/figure-html/plot_boundary-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="show-resolution-extent-and-crs-of-raster-and-study-area" class="level2">
+<h2 class="anchored" data-anchor-id="show-resolution-extent-and-crs-of-raster-and-study-area">7. Show Resolution, Extent, and CRS of Raster and Study Area</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get and print the extent of the Australian boundary vector</span></span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>australia_extent <span class="ot">&lt;-</span> <span class="fu">ext</span>(australia_boundary)</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"Extent of Australia boundary:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Extent of Australia boundary:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(australia_extent)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>SpatExtent : 96.8169516292395, 167.99803924286, -43.7404965718585, -9.14216252238993 (xmin, xmax, ymin, ymax)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get and print the CRS of the Australian boundary vector</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>australia_crs <span class="ot">&lt;-</span> <span class="fu">crs</span>(australia_boundary)</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">"CRS of Australia boundary:</span><span class="sc">\n</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CRS of Australia boundary:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(australia_crs)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "GEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic System 1984 (Transit)\"],\n        MEMBER[\"World Geodetic System 1984 (G730)\"],\n        MEMBER[\"World Geodetic System 1984 (G873)\"],\n        MEMBER[\"World Geodetic System 1984 (G1150)\"],\n        MEMBER[\"World Geodetic System 1984 (G1674)\"],\n        MEMBER[\"World Geodetic System 1984 (G1762)\"],\n        MEMBER[\"World Geodetic System 1984 (G2139)\"],\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]],\n        ENSEMBLEACCURACY[2.0]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    USAGE[\n        SCOPE[\"Horizontal component of 3D system.\"],\n        AREA[\"World.\"],\n        BBOX[-90,-180,90,180]],\n    ID[\"EPSG\",4326]]"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb93"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb93-1"><a href="#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Iterate over the rasters to show resolution, extent, and CRS</span></span>
+<span id="cb93-2"><a href="#cb93-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(rasters)) {</span>
+<span id="cb93-3"><a href="#cb93-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Raster"</span>, i, <span class="st">":</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb93-4"><a href="#cb93-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-5"><a href="#cb93-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Show the resolution</span></span>
+<span id="cb93-6"><a href="#cb93-6" aria-hidden="true" tabindex="-1"></a>  res_val <span class="ot">&lt;-</span> <span class="fu">res</span>(rasters[[i]])</span>
+<span id="cb93-7"><a href="#cb93-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Resolution (x, y):"</span>, res_val[<span class="dv">1</span>], <span class="st">","</span>, res_val[<span class="dv">2</span>], <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb93-8"><a href="#cb93-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-9"><a href="#cb93-9" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Show the extent - Modified to handle S4 object</span></span>
+<span id="cb93-10"><a href="#cb93-10" aria-hidden="true" tabindex="-1"></a>  ext_val <span class="ot">&lt;-</span> <span class="fu">ext</span>(rasters[[i]])</span>
+<span id="cb93-11"><a href="#cb93-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"Extent:"</span>, <span class="fu">as.character</span>(ext_val), <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>) <span class="co"># Convert ext_val to character</span></span>
+<span id="cb93-12"><a href="#cb93-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb93-13"><a href="#cb93-13" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Show the CRS</span></span>
+<span id="cb93-14"><a href="#cb93-14" aria-hidden="true" tabindex="-1"></a>  crs_val <span class="ot">&lt;-</span> <span class="fu">crs</span>(rasters[[i]])</span>
+<span id="cb93-15"><a href="#cb93-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"CRS:"</span>, crs_val, <span class="st">"</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb93-16"><a href="#cb93-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Raster 1 :
+Resolution (x, y): 0.04166667 , 0.04166667 
+Extent: ext(-180, 180, -90, 90) 
+CRS: GEOGCRS["WGS 84",
+    ENSEMBLE["World Geodetic System 1984 ensemble",
+        MEMBER["World Geodetic System 1984 (Transit)"],
+        MEMBER["World Geodetic System 1984 (G730)"],
+        MEMBER["World Geodetic System 1984 (G873)"],
+        MEMBER["World Geodetic System 1984 (G1150)"],
+        MEMBER["World Geodetic System 1984 (G1674)"],
+        MEMBER["World Geodetic System 1984 (G1762)"],
+        MEMBER["World Geodetic System 1984 (G2139)"],
+        ELLIPSOID["WGS 84",6378137,298.257223563,
+            LENGTHUNIT["metre",1]],
+        ENSEMBLEACCURACY[2.0]],
+    PRIMEM["Greenwich",0,
+        ANGLEUNIT["degree",0.0174532925199433]],
+    CS[ellipsoidal,2],
+        AXIS["geodetic latitude (Lat)",north,
+            ORDER[1],
+            ANGLEUNIT["degree",0.0174532925199433]],
+        AXIS["geodetic longitude (Lon)",east,
+            ORDER[2],
+            ANGLEUNIT["degree",0.0174532925199433]],
+    USAGE[
+        SCOPE["Horizontal component of 3D system."],
+        AREA["World."],
+        BBOX[-90,-180,90,180]],
+    ID["EPSG",4326]] 
+
+Raster 2 :
+Resolution (x, y): 0.04166667 , 0.04166667 
+Extent: ext(-180, 180, -90, 90) 
+CRS: GEOGCRS["WGS 84",
+    ENSEMBLE["World Geodetic System 1984 ensemble",
+        MEMBER["World Geodetic System 1984 (Transit)"],
+        MEMBER["World Geodetic System 1984 (G730)"],
+        MEMBER["World Geodetic System 1984 (G873)"],
+        MEMBER["World Geodetic System 1984 (G1150)"],
+        MEMBER["World Geodetic System 1984 (G1674)"],
+        MEMBER["World Geodetic System 1984 (G1762)"],
+        MEMBER["World Geodetic System 1984 (G2139)"],
+        ELLIPSOID["WGS 84",6378137,298.257223563,
+            LENGTHUNIT["metre",1]],
+        ENSEMBLEACCURACY[2.0]],
+    PRIMEM["Greenwich",0,
+        ANGLEUNIT["degree",0.0174532925199433]],
+    CS[ellipsoidal,2],
+        AXIS["geodetic latitude (Lat)",north,
+            ORDER[1],
+            ANGLEUNIT["degree",0.0174532925199433]],
+        AXIS["geodetic longitude (Lon)",east,
+            ORDER[2],
+            ANGLEUNIT["degree",0.0174532925199433]],
+    USAGE[
+        SCOPE["Horizontal component of 3D system."],
+        AREA["World."],
+        BBOX[-90,-180,90,180]],
+    ID["EPSG",4326]] 
+
+Raster 3 :
+Resolution (x, y): 0.04166667 , 0.04166667 
+Extent: ext(-180, 180, -90, 90) 
+CRS: GEOGCRS["WGS 84",
+    ENSEMBLE["World Geodetic System 1984 ensemble",
+        MEMBER["World Geodetic System 1984 (Transit)"],
+        MEMBER["World Geodetic System 1984 (G730)"],
+        MEMBER["World Geodetic System 1984 (G873)"],
+        MEMBER["World Geodetic System 1984 (G1150)"],
+        MEMBER["World Geodetic System 1984 (G1674)"],
+        MEMBER["World Geodetic System 1984 (G1762)"],
+        MEMBER["World Geodetic System 1984 (G2139)"],
+        ELLIPSOID["WGS 84",6378137,298.257223563,
+            LENGTHUNIT["metre",1]],
+        ENSEMBLEACCURACY[2.0]],
+    PRIMEM["Greenwich",0,
+        ANGLEUNIT["degree",0.0174532925199433]],
+    CS[ellipsoidal,2],
+        AXIS["geodetic latitude (Lat)",north,
+            ORDER[1],
+            ANGLEUNIT["degree",0.0174532925199433]],
+        AXIS["geodetic longitude (Lon)",east,
+            ORDER[2],
+            ANGLEUNIT["degree",0.0174532925199433]],
+    USAGE[
+        SCOPE["Horizontal component of 3D system."],
+        AREA["World."],
+        BBOX[-90,-180,90,180]],
+    ID["EPSG",4326]] 
+
+Raster 4 :
+Resolution (x, y): 0.04166667 , 0.04166667 
+Extent: ext(-180, 180, -90, 90) 
+CRS: GEOGCRS["WGS 84",
+    ENSEMBLE["World Geodetic System 1984 ensemble",
+        MEMBER["World Geodetic System 1984 (Transit)"],
+        MEMBER["World Geodetic System 1984 (G730)"],
+        MEMBER["World Geodetic System 1984 (G873)"],
+        MEMBER["World Geodetic System 1984 (G1150)"],
+        MEMBER["World Geodetic System 1984 (G1674)"],
+        MEMBER["World Geodetic System 1984 (G1762)"],
+        MEMBER["World Geodetic System 1984 (G2139)"],
+        ELLIPSOID["WGS 84",6378137,298.257223563,
+            LENGTHUNIT["metre",1]],
+        ENSEMBLEACCURACY[2.0]],
+    PRIMEM["Greenwich",0,
+        ANGLEUNIT["degree",0.0174532925199433]],
+    CS[ellipsoidal,2],
+        AXIS["geodetic latitude (Lat)",north,
+            ORDER[1],
+            ANGLEUNIT["degree",0.0174532925199433]],
+        AXIS["geodetic longitude (Lon)",east,
+            ORDER[2],
+            ANGLEUNIT["degree",0.0174532925199433]],
+    USAGE[
+        SCOPE["Horizontal component of 3D system."],
+        AREA["World."],
+        BBOX[-90,-180,90,180]],
+    ID["EPSG",4326]] 
+
+Raster 5 :
+Resolution (x, y): 0.04166667 , 0.04166667 
+Extent: ext(-180, 180, -90, 90) 
+CRS: GEOGCRS["WGS 84",
+    ENSEMBLE["World Geodetic System 1984 ensemble",
+        MEMBER["World Geodetic System 1984 (Transit)"],
+        MEMBER["World Geodetic System 1984 (G730)"],
+        MEMBER["World Geodetic System 1984 (G873)"],
+        MEMBER["World Geodetic System 1984 (G1150)"],
+        MEMBER["World Geodetic System 1984 (G1674)"],
+        MEMBER["World Geodetic System 1984 (G1762)"],
+        MEMBER["World Geodetic System 1984 (G2139)"],
+        ELLIPSOID["WGS 84",6378137,298.257223563,
+            LENGTHUNIT["metre",1]],
+        ENSEMBLEACCURACY[2.0]],
+    PRIMEM["Greenwich",0,
+        ANGLEUNIT["degree",0.0174532925199433]],
+    CS[ellipsoidal,2],
+        AXIS["geodetic latitude (Lat)",north,
+            ORDER[1],
+            ANGLEUNIT["degree",0.0174532925199433]],
+        AXIS["geodetic longitude (Lon)",east,
+            ORDER[2],
+            ANGLEUNIT["degree",0.0174532925199433]],
+    USAGE[
+        SCOPE["Horizontal component of 3D system."],
+        AREA["World."],
+        BBOX[-90,-180,90,180]],
+    ID["EPSG",4326]] 
+
+Raster 6 :
+Resolution (x, y): 250 , 250 
+Extent: ext(-2189542.251493, 2468707.748507, -4964936.305317, -1047686.305317) 
+CRS: PROJCRS["unknown",
+    BASEGEOGCRS["unknown",
+        DATUM["Unknown based on GRS80 ellipsoid",
+            ELLIPSOID["GRS 1980",6378137,298.257222101004,
+                LENGTHUNIT["metre",1],
+                ID["EPSG",7019]]],
+        PRIMEM["Greenwich",0,
+            ANGLEUNIT["degree",0.0174532925199433,
+                ID["EPSG",9122]]]],
+    CONVERSION["Albers Equal Area",
+        METHOD["Albers Equal Area",
+            ID["EPSG",9822]],
+        PARAMETER["Latitude of false origin",0,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8821]],
+        PARAMETER["Longitude of false origin",132,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8822]],
+        PARAMETER["Latitude of 1st standard parallel",-18,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8823]],
+        PARAMETER["Latitude of 2nd standard parallel",-36,
+            ANGLEUNIT["degree",0.0174532925199433],
+            ID["EPSG",8824]],
+        PARAMETER["Easting at false origin",0,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8826]],
+        PARAMETER["Northing at false origin",0,
+            LENGTHUNIT["metre",1],
+            ID["EPSG",8827]]],
+    CS[Cartesian,2],
+        AXIS["easting",east,
+            ORDER[1],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]],
+        AXIS["northing",north,
+            ORDER[2],
+            LENGTHUNIT["metre",1,
+                ID["EPSG",9001]]]] </code></pre>
+</div>
+</div>
+</section>
+<section id="reproject-raster-to-wgs-84-if-needed" class="level2">
+<h2 class="anchored" data-anchor-id="reproject-raster-to-wgs-84-if-needed">8. Reproject Raster to WGS 84 if Needed</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb95"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb95-1"><a href="#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(terra)</span>
+<span id="cb95-2"><a href="#cb95-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-3"><a href="#cb95-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Function to check CRS and reproject to WGS 84 if needed</span></span>
+<span id="cb95-4"><a href="#cb95-4" aria-hidden="true" tabindex="-1"></a>reproject_if_needed <span class="ot">&lt;-</span> <span class="cf">function</span>(raster, <span class="at">is_categorical =</span> <span class="cn">FALSE</span>) {</span>
+<span id="cb95-5"><a href="#cb95-5" aria-hidden="true" tabindex="-1"></a>  wgs84_crs <span class="ot">&lt;-</span> <span class="st">"EPSG:4326"</span>  <span class="co"># Define WGS 84 CRS using EPSG code</span></span>
+<span id="cb95-6"><a href="#cb95-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-7"><a href="#cb95-7" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Check if the CRS is already WGS 84</span></span>
+<span id="cb95-8"><a href="#cb95-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">identical</span>(<span class="fu">crs</span>(raster), wgs84_crs)) {</span>
+<span id="cb95-9"><a href="#cb95-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Choose the appropriate method based on raster type</span></span>
+<span id="cb95-10"><a href="#cb95-10" aria-hidden="true" tabindex="-1"></a>    method <span class="ot">&lt;-</span> <span class="cf">if</span> (is_categorical) <span class="st">"near"</span> <span class="cf">else</span> <span class="st">"bilinear"</span></span>
+<span id="cb95-11"><a href="#cb95-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Reprojecting raster to WGS 84 using method: "</span>, method)</span>
+<span id="cb95-12"><a href="#cb95-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-13"><a href="#cb95-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Reproject raster to WGS 84 CRS</span></span>
+<span id="cb95-14"><a href="#cb95-14" aria-hidden="true" tabindex="-1"></a>    raster <span class="ot">&lt;-</span> <span class="fu">project</span>(raster, wgs84_crs, <span class="at">method =</span> method)</span>
+<span id="cb95-15"><a href="#cb95-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-16"><a href="#cb95-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Convert to factor again if categorical to ensure category levels are preserved</span></span>
+<span id="cb95-17"><a href="#cb95-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (is_categorical) {</span>
+<span id="cb95-18"><a href="#cb95-18" aria-hidden="true" tabindex="-1"></a>      raster <span class="ot">&lt;-</span> <span class="fu">as.factor</span>(raster)</span>
+<span id="cb95-19"><a href="#cb95-19" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb95-20"><a href="#cb95-20" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb95-21"><a href="#cb95-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-22"><a href="#cb95-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(raster)</span>
+<span id="cb95-23"><a href="#cb95-23" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb95-24"><a href="#cb95-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-25"><a href="#cb95-25" aria-hidden="true" tabindex="-1"></a><span class="co"># Define the categorical raster indices</span></span>
+<span id="cb95-26"><a href="#cb95-26" aria-hidden="true" tabindex="-1"></a>categorical_indices <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">6</span>)  <span class="co"># Adjust if there are other categorical rasters</span></span>
+<span id="cb95-27"><a href="#cb95-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb95-28"><a href="#cb95-28" aria-hidden="true" tabindex="-1"></a><span class="co"># Apply the function to each raster in the list</span></span>
+<span id="cb95-29"><a href="#cb95-29" aria-hidden="true" tabindex="-1"></a>rasters_reprojected <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_along</span>(rasters), <span class="cf">function</span>(i) {</span>
+<span id="cb95-30"><a href="#cb95-30" aria-hidden="true" tabindex="-1"></a>  is_categorical <span class="ot">&lt;-</span> i <span class="sc">%in%</span> categorical_indices</span>
+<span id="cb95-31"><a href="#cb95-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">reproject_if_needed</span>(rasters[[i]], <span class="at">is_categorical =</span> is_categorical)</span>
+<span id="cb95-32"><a href="#cb95-32" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Reprojecting raster to WGS 84 using method: bilinear
+Reprojecting raster to WGS 84 using method: bilinear
+Reprojecting raster to WGS 84 using method: bilinear
+Reprojecting raster to WGS 84 using method: bilinear
+Reprojecting raster to WGS 84 using method: bilinear</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Reprojecting raster to WGS 84 using method: near</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb99"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb99-1"><a href="#cb99-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the CRS of each reprojected raster to verify</span></span>
+<span id="cb99-2"><a href="#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_along</span>(rasters_reprojected)) {</span>
+<span id="cb99-3"><a href="#cb99-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="st">"</span><span class="sc">\n</span><span class="st">Raster"</span>, i, <span class="st">"CRS:</span><span class="sc">\n</span><span class="st">"</span>)</span>
+<span id="cb99-4"><a href="#cb99-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">crs</span>(rasters_reprojected[[i]]))</span>
+<span id="cb99-5"><a href="#cb99-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Raster 1 CRS:
+[1] "GEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic System 1984 (Transit)\"],\n        MEMBER[\"World Geodetic System 1984 (G730)\"],\n        MEMBER[\"World Geodetic System 1984 (G873)\"],\n        MEMBER[\"World Geodetic System 1984 (G1150)\"],\n        MEMBER[\"World Geodetic System 1984 (G1674)\"],\n        MEMBER[\"World Geodetic System 1984 (G1762)\"],\n        MEMBER[\"World Geodetic System 1984 (G2139)\"],\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]],\n        ENSEMBLEACCURACY[2.0]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    USAGE[\n        SCOPE[\"Horizontal component of 3D system.\"],\n        AREA[\"World.\"],\n        BBOX[-90,-180,90,180]],\n    ID[\"EPSG\",4326]]"
+
+Raster 2 CRS:
+[1] "GEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic System 1984 (Transit)\"],\n        MEMBER[\"World Geodetic System 1984 (G730)\"],\n        MEMBER[\"World Geodetic System 1984 (G873)\"],\n        MEMBER[\"World Geodetic System 1984 (G1150)\"],\n        MEMBER[\"World Geodetic System 1984 (G1674)\"],\n        MEMBER[\"World Geodetic System 1984 (G1762)\"],\n        MEMBER[\"World Geodetic System 1984 (G2139)\"],\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]],\n        ENSEMBLEACCURACY[2.0]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    USAGE[\n        SCOPE[\"Horizontal component of 3D system.\"],\n        AREA[\"World.\"],\n        BBOX[-90,-180,90,180]],\n    ID[\"EPSG\",4326]]"
+
+Raster 3 CRS:
+[1] "GEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic System 1984 (Transit)\"],\n        MEMBER[\"World Geodetic System 1984 (G730)\"],\n        MEMBER[\"World Geodetic System 1984 (G873)\"],\n        MEMBER[\"World Geodetic System 1984 (G1150)\"],\n        MEMBER[\"World Geodetic System 1984 (G1674)\"],\n        MEMBER[\"World Geodetic System 1984 (G1762)\"],\n        MEMBER[\"World Geodetic System 1984 (G2139)\"],\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]],\n        ENSEMBLEACCURACY[2.0]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    USAGE[\n        SCOPE[\"Horizontal component of 3D system.\"],\n        AREA[\"World.\"],\n        BBOX[-90,-180,90,180]],\n    ID[\"EPSG\",4326]]"
+
+Raster 4 CRS:
+[1] "GEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic System 1984 (Transit)\"],\n        MEMBER[\"World Geodetic System 1984 (G730)\"],\n        MEMBER[\"World Geodetic System 1984 (G873)\"],\n        MEMBER[\"World Geodetic System 1984 (G1150)\"],\n        MEMBER[\"World Geodetic System 1984 (G1674)\"],\n        MEMBER[\"World Geodetic System 1984 (G1762)\"],\n        MEMBER[\"World Geodetic System 1984 (G2139)\"],\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]],\n        ENSEMBLEACCURACY[2.0]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    USAGE[\n        SCOPE[\"Horizontal component of 3D system.\"],\n        AREA[\"World.\"],\n        BBOX[-90,-180,90,180]],\n    ID[\"EPSG\",4326]]"
+
+Raster 5 CRS:
+[1] "GEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic System 1984 (Transit)\"],\n        MEMBER[\"World Geodetic System 1984 (G730)\"],\n        MEMBER[\"World Geodetic System 1984 (G873)\"],\n        MEMBER[\"World Geodetic System 1984 (G1150)\"],\n        MEMBER[\"World Geodetic System 1984 (G1674)\"],\n        MEMBER[\"World Geodetic System 1984 (G1762)\"],\n        MEMBER[\"World Geodetic System 1984 (G2139)\"],\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]],\n        ENSEMBLEACCURACY[2.0]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    USAGE[\n        SCOPE[\"Horizontal component of 3D system.\"],\n        AREA[\"World.\"],\n        BBOX[-90,-180,90,180]],\n    ID[\"EPSG\",4326]]"
+
+Raster 6 CRS:
+[1] "GEOGCRS[\"WGS 84\",\n    ENSEMBLE[\"World Geodetic System 1984 ensemble\",\n        MEMBER[\"World Geodetic System 1984 (Transit)\"],\n        MEMBER[\"World Geodetic System 1984 (G730)\"],\n        MEMBER[\"World Geodetic System 1984 (G873)\"],\n        MEMBER[\"World Geodetic System 1984 (G1150)\"],\n        MEMBER[\"World Geodetic System 1984 (G1674)\"],\n        MEMBER[\"World Geodetic System 1984 (G1762)\"],\n        MEMBER[\"World Geodetic System 1984 (G2139)\"],\n        ELLIPSOID[\"WGS 84\",6378137,298.257223563,\n            LENGTHUNIT[\"metre\",1]],\n        ENSEMBLEACCURACY[2.0]],\n    PRIMEM[\"Greenwich\",0,\n        ANGLEUNIT[\"degree\",0.0174532925199433]],\n    CS[ellipsoidal,2],\n        AXIS[\"geodetic latitude (Lat)\",north,\n            ORDER[1],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n        AXIS[\"geodetic longitude (Lon)\",east,\n            ORDER[2],\n            ANGLEUNIT[\"degree\",0.0174532925199433]],\n    USAGE[\n        SCOPE[\"Horizontal component of 3D system.\"],\n        AREA[\"World.\"],\n        BBOX[-90,-180,90,180]],\n    ID[\"EPSG\",4326]]"</code></pre>
+</div>
+</div>
+</section>
+<section id="resample-rasters-to-match-the-finest-resolution" class="level2">
+<h2 class="anchored" data-anchor-id="resample-rasters-to-match-the-finest-resolution">9. Resample Rasters to Match the Finest Resolution</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb101"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb101-1"><a href="#cb101-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Determine the finest resolution among the reprojected rasters</span></span>
+<span id="cb101-2"><a href="#cb101-2" aria-hidden="true" tabindex="-1"></a>resolutions <span class="ot">&lt;-</span> <span class="fu">sapply</span>(rasters_reprojected, <span class="cf">function</span>(r) <span class="fu">res</span>(r)[<span class="dv">1</span>] <span class="sc">*</span> <span class="fu">res</span>(r)[<span class="dv">2</span>])</span>
+<span id="cb101-3"><a href="#cb101-3" aria-hidden="true" tabindex="-1"></a>finest_index <span class="ot">&lt;-</span> <span class="fu">which.min</span>(resolutions)</span>
+<span id="cb101-4"><a href="#cb101-4" aria-hidden="true" tabindex="-1"></a>finest_raster <span class="ot">&lt;-</span> rasters_reprojected[[finest_index]]</span>
+<span id="cb101-5"><a href="#cb101-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-6"><a href="#cb101-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Resample each raster to match the finest resolution</span></span>
+<span id="cb101-7"><a href="#cb101-7" aria-hidden="true" tabindex="-1"></a>rasters_resampled <span class="ot">&lt;-</span> <span class="fu">lapply</span>(<span class="fu">seq_along</span>(rasters_reprojected), <span class="cf">function</span>(i) {</span>
+<span id="cb101-8"><a href="#cb101-8" aria-hidden="true" tabindex="-1"></a>  raster <span class="ot">&lt;-</span> rasters_reprojected[[i]]</span>
+<span id="cb101-9"><a href="#cb101-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-10"><a href="#cb101-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Determine resampling method based on the type of raster (categorical vs continuous)</span></span>
+<span id="cb101-11"><a href="#cb101-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">==</span> <span class="dv">6</span>) {  <span class="co"># the 6th raster is the categorical one</span></span>
+<span id="cb101-12"><a href="#cb101-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Resampling categorical raster to match the finest resolution using 'nearest' method."</span>)</span>
+<span id="cb101-13"><a href="#cb101-13" aria-hidden="true" tabindex="-1"></a>    raster <span class="ot">&lt;-</span> <span class="fu">resample</span>(raster, finest_raster, <span class="at">method =</span> <span class="st">"near"</span>)  <span class="co"># Use 'near' for categorical data</span></span>
+<span id="cb101-14"><a href="#cb101-14" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
+<span id="cb101-15"><a href="#cb101-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">message</span>(<span class="st">"Resampling continuous raster to match the finest resolution using 'bilinear' method."</span>)</span>
+<span id="cb101-16"><a href="#cb101-16" aria-hidden="true" tabindex="-1"></a>    raster <span class="ot">&lt;-</span> <span class="fu">resample</span>(raster, finest_raster, <span class="at">method =</span> <span class="st">"bilinear"</span>)  <span class="co"># Use 'bilinear' for continuous data</span></span>
+<span id="cb101-17"><a href="#cb101-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb101-18"><a href="#cb101-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb101-19"><a href="#cb101-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(raster)</span>
+<span id="cb101-20"><a href="#cb101-20" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Resampling continuous raster to match the finest resolution using 'bilinear' method.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Resampling continuous raster to match the finest resolution using 'bilinear' method.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Resampling continuous raster to match the finest resolution using 'bilinear' method.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Resampling continuous raster to match the finest resolution using 'bilinear' method.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Resampling continuous raster to match the finest resolution using 'bilinear' method.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Resampling categorical raster to match the finest resolution using 'nearest' method.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+</div>
+</section>
+<section id="crop-and-mask-raster-to-study-area" class="level2">
+<h2 class="anchored" data-anchor-id="crop-and-mask-raster-to-study-area">10. Crop and Mask Raster to Study Area</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Reproject the Australian boundary vector to WGS 84</span></span>
+<span id="cb114-2"><a href="#cb114-2" aria-hidden="true" tabindex="-1"></a>wgs84_crs <span class="ot">&lt;-</span> <span class="st">"EPSG:4326"</span></span>
+<span id="cb114-3"><a href="#cb114-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-4"><a href="#cb114-4" aria-hidden="true" tabindex="-1"></a>australia_boundary_vect <span class="ot">&lt;-</span> <span class="fu">vect</span>(australia_boundary)</span>
+<span id="cb114-5"><a href="#cb114-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-6"><a href="#cb114-6" aria-hidden="true" tabindex="-1"></a>australia_boundary_vect_wgs84 <span class="ot">&lt;-</span> <span class="fu">project</span>(australia_boundary_vect, wgs84_crs)</span>
+<span id="cb114-7"><a href="#cb114-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb114-8"><a href="#cb114-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Crop and mask each resampled raster to the extent of Australia</span></span>
+<span id="cb114-9"><a href="#cb114-9" aria-hidden="true" tabindex="-1"></a>cropped_masked_rasters <span class="ot">&lt;-</span> <span class="fu">lapply</span>(rasters_resampled, <span class="cf">function</span>(raster) {</span>
+<span id="cb114-10"><a href="#cb114-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Crop the raster to the extent of Australia</span></span>
+<span id="cb114-11"><a href="#cb114-11" aria-hidden="true" tabindex="-1"></a>  cropped_raster <span class="ot">&lt;-</span> <span class="fu">crop</span>(raster, australia_boundary_vect_wgs84)</span>
+<span id="cb114-12"><a href="#cb114-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Mask the raster with the Australia boundary to keep only data within Australia</span></span>
+<span id="cb114-13"><a href="#cb114-13" aria-hidden="true" tabindex="-1"></a>  masked_raster <span class="ot">&lt;-</span> <span class="fu">mask</span>(cropped_raster, australia_boundary_vect_wgs84)</span>
+<span id="cb114-14"><a href="#cb114-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(masked_raster)</span>
+<span id="cb114-15"><a href="#cb114-15" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          
+
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+</div>
+</section>
+<section id="stack-and-save-raster" class="level2">
+<h2 class="anchored" data-anchor-id="stack-and-save-raster">11. Stack and Save Raster</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Stack the cropped and masked rasters together</span></span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>raster_stack <span class="ot">&lt;-</span> <span class="fu">do.call</span>(c, cropped_masked_rasters)</span>
+<span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb116-4"><a href="#cb116-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Print summary to verify the stack</span></span>
+<span id="cb116-5"><a href="#cb116-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(raster_stack)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class       : SpatRaster 
+dimensions  : 14113, 22774, 6  (nrow, ncol, nlyr)
+resolution  : 0.002451532, 0.002451532  (x, y)
+extent      : 105.7046, 161.5358, -43.74011, -9.141636  (xmin, xmax, ymin, ymax)
+coord. ref. : lon/lat WGS 84 (EPSG:4326) 
+sources     : spat_52a0288f180f_21152.tif  
+              spat_52a02c08d10a_21152.tif  
+              spat_52a057cfdb8f_21152.tif  
+              ... and 3 more source(s)
+names       : env_var_1, env_var_2, env_var_3, env_var_4, env_var_5, Category 
+min values  :  4.272866,  3.591667,  31.50585,  53.13949,  15.60910,        1 
+max values  : 29.350683, 17.464588,  77.26542, 682.58344,  42.34991,        6 </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Plot each layer to visually verify the raster stack</span></span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(raster_stack)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="raster_preparation_files/figure-html/stack_save_rasters-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Save the raster stack to a GeoTIFF file</span></span>
+<span id="cb119-2"><a href="#cb119-2" aria-hidden="true" tabindex="-1"></a><span class="fu">writeRaster</span>(raster_stack, <span class="at">filename =</span> <span class="st">"stacked_raster.tif"</span>, <span class="at">overwrite =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+|---------|---------|---------|---------|
+=========================================
+                                          </code></pre>
+</div>
+</div>
+<p><img src="https://raw.githubusercontent.com/EcoCommons-Australia-2024-2026/ec-notebook_site/main/images/EC_section_break.png" class="img-fluid"></p>
+<p>EcoCommons Australia partners with the Australian Research Data Commons (ARDC), which is supported by funding from the National Collaborative Research Infrastructure Strategy (NCRIS) <a href="https://doi.org/10.47486/PL108">https://doi.org/10.47486/PL108.</a></p>
+<div data-align="center">
+<p><strong>Our partner</strong></p>
+</div>
+<p><img src="https://raw.githubusercontent.com/EcoCommons-Australia-2024-2026/ec-notebook_site/main/images/partners_logos.png" class="img-fluid"></p>
+</section>
+</section>
+<section id="how-to-cite-ecocommons" class="level1">
+<h1><strong>How to Cite EcoCommons</strong></h1>
+<p>If you use EcoCommons in your research, please cite the platform as follows:</p>
+<blockquote class="blockquote">
+<p>EcoCommons Australia 2024. <em>EcoCommons Australia – a collaborative commons for ecological and environmental modelling</em>, Queensland Cyber Infrastructure Foundation, Brisbane, Queensland. Available at: <a href="https://data–explorer.app.ecocommons.org.au/" class="uri">https://data–explorer.app.ecocommons.org.au/</a> (Accessed: MM DD, YYYY). <a href="https://doi.org/10.47486/PL108" class="uri">https://doi.org/10.47486/PL108</a></p>
+</blockquote>
+<p>You can download the citation file for EcoCommons Australia here: <a href="reference.bib">Download the BibTeX file</a></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<footer>
+  <style>
+    footer {
+      font-family: 'Averta', sans-serif;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 26px;
+      color: rgb(49, 50, 52);
+    }
+    footer p, footer h3, footer img, footer div {
+      max-width: 80%; /* Controls the maximum width of all content */
+      margin: 0 auto; /* Ensures equal left and right margins */
+      text-align: center; /* Centers text and images */
+    }
+    footer h3 {
+      font-size: 42px;
+      font-weight: 800;
+      color: rgb(49, 50, 52);
+      margin-bottom: 10px;
+    }
+    footer a {
+      color: rgb(49, 50, 52);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+    footer img {
+      height: 80px; /* Adjust the height of the logo */
+      margin: 20px auto;
+    }
+
+    /* Add margin above the "Our Partner" section */
+    footer h3.our-partner {
+      margin-top: 40px; /* Add space above "Our Partner" */
+    }
+  </style>
+
+  <!-- PNG Image at the Beginning -->
+  <img src="https://raw.githubusercontent.com/EcoCommons-Australia-2024-2026/ec-notebook_site/main/images/EC_breaker_nobackgoundcolor.png" alt="EC_section_break" style="display: block; margin: 20px auto; max-width: 50%; height: auto;">
+  
+  <hr style="border: 1px solid #ccc; margin: 20px auto;">
+
+  <!-- EcoCommons Copyright Section -->
+  <p>
+    © 2024 EcoCommons. EcoCommons Australia partners with the Australian Research Data Commons (ARDC), 
+    which is supported by funding from the National Collaborative Research Infrastructure Strategy (NCRIS). 
+    <a href="https://doi.org/10.47486/PL108">https://doi.org/10.47486/PL108</a>
+  </p>
+
+  <!-- Our Partner Section -->
+  <h3 class="our-partner">Our Partner</h3> <!-- Added class to add space above -->
+
+  <!-- Logo Section -->
+  <div>
+    <img src="https://raw.githubusercontent.com/EcoCommons-Australia-2024-2026/ec-notebook_site/main/images/partners_logos.png" alt="EcoCommons Partner Logos" style="width: 600px; height: auto; margin-bottom: 10px;">
+  </div>
+
+  <!-- Citation Section -->
+  <hr style="border: 1px solid #ccc; margin: 20px auto;">
+
+  <h3 style="font-size: 24px;">How to Cite EcoCommons</h3>
+  <p>
+    If you use EcoCommons in your research, please cite the platform as follows:
+  </p>
+  <p>
+    EcoCommons Australia 2024. EcoCommons Australia – a collaborative commons for ecological and environmental modelling, Queensland Cyber Infrastructure Foundation, Brisbane, Queensland. Available at: 
+    <a href="https://data–explorer.app.ecocommons.org.au/">https://data–explorer.app.ecocommons.org.au/</a> 
+    (Accessed: MM DD, YYYY). 
+    <a href="https://doi.org/10.47486/PL108">https://doi.org/10.47486/PL108</a>
+  </p>
+  <p>
+    You can download the citation file for EcoCommons Australia here: 
+    <a href="https://raw.githubusercontent.com/EcoCommons-Australia-2024-2026/ec-notebook_site/main/reference.bib">Download the BibTeX file</a>
+  </p>
+
+  <!-- General Copyright Notice -->
+  <p>
+    © 2024 EcoCommons. All rights reserved.
+  </p>
+</footer>
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const onCopySuccess = function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
+  });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
