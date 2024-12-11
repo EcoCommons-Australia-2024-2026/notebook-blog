@@ -8,7 +8,7 @@ website:
       - href: index.html
         text: "<img src='images/EcoCommons Logo White.png' alt='EcoCommons Logo' style='height:45px; vertical-align: middle; margin-right: 10px;'> <span style='font-size: 30px; position: relative; top: 7px;'>EcoNotebooks</span>"
     right:  
-      - text: SDMs
+      - text: Modelling Steps
         menu:
           - href: dataprep.html
             text: Data Preparation
@@ -18,12 +18,10 @@ website:
             text: Prediction
           - href: evaluation.html
             text: Evaluation
-      - text: Models
+      - text: SDMs
         menu:
-          - href: glm.html
+          - href: EC_GLM.html
             text: GLM
-          - href: maxent.html
-            text: Maxent
       - text: Visualisation
         menu:
           - href: visual1.html
@@ -34,8 +32,6 @@ website:
         menu:
           - href: sp/ecocommons-marxan-integration-poc.html
             text: Connecting Marxan
-          - href: SP2.html
-            text: SP2
       - href: about.html
         text: About
 
