@@ -1,0 +1,52 @@
+---
+title: "about"
+format: html
+editor: visual
+---
+
+## Our team
+
+![](images/team_photo.png)
+
+### **Dr Sebastian Lopez Marcano**
+
+***seabass he/him***
+
+**Principal Data Scientist**
+
+Sebastian is a data scientist specialising in AI, computer vision, data analytics, and developing data-intensive interactive applications for AgTech, the environment, and climate. He manages QCIF’s Sustainable Futures portfolio, a team in charge of the delivery of ARDC-supported platforms such as EcoCommons and Wildlife Observatories. From 2018 to 2024, Sebastian managed FishID, Australia’s platform for automated analysis of aquatic imagery. In his free time, you can find Seb cycling, reviewing restaurants, and fishing.
+
+### **Dr Jenna Wraith**
+
+***Captain Marval  (she/her)***
+
+**Senior Data Scientist**
+
+Jenna is a Conservation Scientist specialising in ecological modelling, species distribution modelling and using biodiversity data to inform policy. As an Adjunct Research Fellow at the Australian Rivers Institute, she uses spatial analyses and conservation planning to drive environmental strategies. Her work bridges science and technology, advancing biodiversity conservation and ecological research. In her free time, you can find Jenna growing food and flowers in the garden, hiking or getting crafty.
+
+### **Abhimanyu Raj Singh**
+
+***Iron Man (he/him)***
+
+**Data Ecologist\
+**
+
+Abhimanyu is a Zoologist who metamorphosed into an Environmental Scientist focused on terrestrial ecology and species behaviour/interactions. His MS majors are in environmental protection as well as climate change adaptation. He was an Environmental Field Officer in Sydney Basin, working with local councils and national parks on threatened and invasive species management. As a Functional Analyst, he facilitates platform testing strategies, provides user support, and assists with ecological and climate change modelling-based use cases/learning material/workshops for the EcoCommons platform.
+
+### **Xiang Zhao**
+
+***Brisbane Bluey (he/him)***
+
+**Software Developer & R Specialist**
+
+Xiang Zhao (Zhao) joined QCIF in 2024 as a Software Developer and R Specialist, focusing on maintaining and developing ecological algorithms for the EcoCommons Platform. During his MPhil at QUT, he utilized spatial mapping, modeling, statistics, and optimization algorithms to study historical biodiversity survey patterns in terrestrial Antarctica, proposing an optimal survey design for future research. At QUT, he also tutors in GIS and Environmental Planning units, leveraging his expertise in GIS and cartography.
+
+Zhao spent two years traveling across Australia as a backpacker. Prior to this, he worked on a conservation project in Southwest China aimed at protecting giant panda habitats from the threat of free-ranging livestock. This project earned him the BirdLife International Young Conservation Leaders Award.
+
+### **Dr Ryan Newis**
+
+***RyeBread (he/him)***
+
+**Software Developer and R Specialist**
+
+Ryan joined QCIF in 2024 as a Software Developer and R Specialist, with a focus on developing an ‘Integrated Ecological Data Service’ for State of Environment reporting in Queensland and working on the EcoCommons platform. His research background encompasses various aspects of the environmental sciences including landscape ecology, ecological network analysis, chemical ecology and pollination biology and ecology. His PhD studies focused on critical but unexplored aspects of stingless bee foraging ecology and colony propagation. When not entrenched in scientific exploration, you can find Ryan in the mountains somewhere searching for secret waterfalls and adding to his birding list.

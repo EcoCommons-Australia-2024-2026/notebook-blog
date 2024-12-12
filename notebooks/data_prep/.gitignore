@@ -1,0 +1,15 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+/.quarto/
+.DS_Store
+
+# Specific file types
+*.tif
+*.xml
+
+# Directory to ignore
+env_data/
+
+

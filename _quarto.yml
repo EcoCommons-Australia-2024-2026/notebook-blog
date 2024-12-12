@@ -5,40 +5,41 @@ project:
 website:
   navbar:
     left:
-      - href: index.html
-        text: "<img src='images/EcoCommons Logo White.png' alt='EcoCommons Logo' style='height:45px; vertical-align: middle; margin-right: 10px;'> <span style='font-size: 30px; position: relative; top: 7px;'>EcoNotebooks</span>"
-    right:  
+      - href: index.qmd
+        text: "<img src='https://raw.githubusercontent.com/EcoCommons-Australia-2024-2026/ec-notebook_site_materials/main/images/EcoCommons%20Logo%20White.png' alt='EcoCommons Logo' style='height:40px; vertical-align: middle; margin-right: 5px;'> <span style='font-size: 25px; position: relative; top: 7px;'>EcoNotebooks</span>"
+    right:
       - text: Modelling Steps
         menu:
-          - href: dataprep.html
+          - href: notebooks/dataprep.qmd
             text: Data Preparation
-          - href: modelling.html
+          - href: notebooks/modelling.qmd
             text: Modelling
-          - href: predicting.html
+          - href: notebooks/predicting.qmd
             text: Prediction
-          - href: evaluation.html
+          - href: notebooks/evaluation.qmd
             text: Evaluation
       - text: SDMs
         menu:
-          - href: EC_GLM.html
+          - href: notebooks/EC_GLM/EC_GLM.qmd
             text: GLM
       - text: Visualisation
         menu:
-          - href: visual1.html
+          - href: notebooks/visual1.qmd
             text: Visualisation 1
-          - href: visual2.html
+          - href: notebooks/visual2.qmd
             text: Visualisation 2
       - text: Spatial Prioritization
         menu:
-          - href: sp/ecocommons-marxan-integration-poc.html
+          - href: notebooks/sp/ecocommons-marxan-integration-poc.qmd
             text: Connecting Marxan
-      - href: about.html
+      - href: about.qmd
         text: About
 
 format:
   html:
-    css: ec_html_template.css
+    css: styles/ec_html_template.css
     toc: true
     include-after-body: footer.html
 
 editor: visual
+

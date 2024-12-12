@@ -1,0 +1,9 @@
+---
+title: "index"
+format: html
+editor: visual
+---
+
+# EcoCommons Notebooks
+
+EcoCommons Notebooks represent an exciting expansion of the platform’s capabilities, offering a new layer of flexibility for advanced users. By incorporating notebooks, EcoCommons enhances its ability to serve the environmental data science community, enabling users to engage with cutting-edge methods, customize workflows, and increase reproducibility in their research. These notebooks, hosted on trusted cloud providers, provide a transparent, open-access approach to environmental data analysis while adhering to the FAIR principles. With planned monthly releases, EcoCommons Notebooks will empower users to explore complex topics such as species migration, community modeling, and data cleaning for biodiversity research.

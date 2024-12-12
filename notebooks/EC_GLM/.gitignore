@@ -1,0 +1,16 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+/.quarto/
+.DS_Store
+
+# Specific file types
+*.tif
+*.xml
+*.zip
+
+# Directory to ignore
+mountain_ash_centralhighlands/
+
+
