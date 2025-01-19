@@ -5,6 +5,8 @@
 /.quarto/
 .DS_Store
 
+mountain_ash_centralhighlands_data.zip
+
 # Specific file types
 *.tif
 *.xml
