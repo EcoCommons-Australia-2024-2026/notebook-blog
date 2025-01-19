@@ -36,57 +36,33 @@ getwd()
 
 ```
 
-Activate the virtual environment "renv" to install and load all essential packages
-
-```{r init-renv, message=FALSE, results='hide'}
-
-# install "renv" package if not been installed
-if (!requireNamespace("renv", quietly = TRUE)) {
-  install.packages("renv")
-}
-
-if (!file.exists("renv/activate.R")) {
-   message("renv has not been initiated in this project. Initializing now...")
-   renv::init()  # This initializes renv if it's not set up
-} else {
-   source("renv/activate.R")  # This ensures the renv environment is activated
-   message("renv is activated.")
-}
-
-# Ensure renv is installed and initialized
-if (file.exists("renv.lock")) {
-  renv::restore()
-} else {
-  message("No renv.lock file found in the current directory.")
-}
-
-```
-
-**Install and load essential packages**
-
-```{r Pack-install, message=FALSE, results='hide'}
+```{r install_libraries, message=FALSE, warning=FALSE}
 
 # Set CRAN mirror
 options(repos = c(CRAN = "https://cran.rstudio.com/"))
 
-# First specify the packages of interest
-packages = c("shiny", "sf", "terra", "ggplot2", "ggspatial", "raster", "dplyr", "shiny", "httpuv", "rmarkdown", "knitr", "jsonlite", "reticulate", "htmltools", "pryr")
+# List of packages to check, install if needed, and load
+packages <- c("shiny", "sf", "terra", "ggplot2", "ggspatial", "raster", "dplyr", "httpuv", "rmarkdown", "knitr", "jsonlite", "reticulate", "htmltools", "pryr")
 
-# Now load or install&load all. This process will take a long time since we are using a virtual environment and install a lot of packages.
-package.check <- lapply(
-  packages,
-  FUN = function(x) {
-    if (!require(x, character.only = TRUE)) {
-      install.packages(x, dependencies = TRUE)
-      library(x, character.only = TRUE)
-     }
+# Function to display a cat message
+cat_message <- function(pkg, message_type) {
+  if (message_type == "installed") {
+    cat(paste0(pkg, " has been installed successfully!\n"))
+  } else if (message_type == "loading") {
+    cat(paste0(pkg, " is already installed and has been loaded!\n"))
   }
- )
+}
 
-
-Sys.setenv(PROJ_LIB = "/usr/local/Cellar/proj/9.5.0/share/proj")
-
-renv::snapshot()
+# Install missing packages and load them
+for (pkg in packages) {
+  if (!requireNamespace(pkg, quietly = TRUE)) {
+    install.packages(pkg)
+    cat_message(pkg, "installed")
+  } else {
+    cat_message(pkg, "loading")
+  }
+  library(pkg, character.only = TRUE)
+}
 
 ```
 

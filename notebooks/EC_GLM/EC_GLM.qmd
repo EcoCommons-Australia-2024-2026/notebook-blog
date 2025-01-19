@@ -169,36 +169,36 @@ We have prepared the following data and uploaded them to our Google Drive for yo
 
 ```{r download_data}
 
-# # De-authenticate Google Drive to access public files
-# drive_deauth()
-# 
-# # Define Google Drive file ID and the path for downloading
-# zip_file_id <- "1twKlNokB7t33QH2KesH7BHYffp5kvoiP" # Replace with the actual file ID of the zipped file
-# datafolder_path <- file.path(workspace)
-# 
-# # Create a local path for the zipped file
-# zip_file_path <- file.path(datafolder_path, "mountain_ash_centralhighlands_data.zip")
-# 
-# # Function to download a file with progress messages
-# download_zip_file <- function(file_id, file_path) {
-#   cat("Downloading zipped file...\n")
-#   drive_download(as_id(file_id), path = file_path, overwrite = TRUE)
-#   cat("Downloaded zipped file to:", file_path, "\n")
-# }
-# 
-# # Create local directory if it doesn't exist
-# if (!dir.exists(datafolder_path)) {
-#   dir.create(datafolder_path, recursive = TRUE)
-# }
-# 
-# # Download the zipped file
-# cat("Starting to download the zipped file...\n")
-# download_zip_file(zip_file_id, zip_file_path)
-# 
-# # Unzip the downloaded file
-# cat("Unzipping the file...\n")
-# unzip(zip_file_path, exdir = datafolder_path)
-# cat("Unzipped files to folder:", datafolder_path, "\n")
+# De-authenticate Google Drive to access public files
+drive_deauth()
+
+# Define Google Drive file ID and the path for downloading
+zip_file_id <- "1twKlNokB7t33QH2KesH7BHYffp5kvoiP" # Replace with the actual file ID of the zipped file
+datafolder_path <- file.path(workspace)
+
+# Create a local path for the zipped file
+zip_file_path <- file.path(datafolder_path, "mountain_ash_centralhighlands_data.zip")
+
+# Function to download a file with progress messages
+download_zip_file <- function(file_id, file_path) {
+  cat("Downloading zipped file...\n")
+  drive_download(as_id(file_id), path = file_path, overwrite = TRUE)
+  cat("Downloaded zipped file to:", file_path, "\n")
+}
+
+# Create local directory if it doesn't exist
+if (!dir.exists(datafolder_path)) {
+  dir.create(datafolder_path, recursive = TRUE)
+}
+
+# Download the zipped file
+cat("Starting to download the zipped file...\n")
+download_zip_file(zip_file_id, zip_file_path)
+
+# Unzip the downloaded file
+cat("Unzipping the file...\n")
+unzip(zip_file_path, exdir = datafolder_path)
+cat("Unzipped files to folder:", datafolder_path, "\n")
 
 ```
 
