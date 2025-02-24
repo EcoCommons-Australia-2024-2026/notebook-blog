@@ -10,6 +10,7 @@ raster_preparation.zip
 # Specific file types
 *.tif
 *.xml
+*.zip
 
 # Directory to ignore
 env_data/
@@ -17,3 +18,5 @@ env_data/
 __MACOSX/
 
 rasters_files/
+imbalanced_data/
+imbalanced_data_files/

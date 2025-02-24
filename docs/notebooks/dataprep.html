@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.57">
+<meta name="generator" content="quarto-1.6.40">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -35,10 +35,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-549806ee2085284f45b00abea8c6df48.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-79108a0fc1995748cbd19a5b0e3e3e7c.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -174,7 +174,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#available-guides" id="toc-available-guides" class="nav-link" data-scroll-target="#available-guides">Available Guides</a>
   <ul class="collapse">
   <li><a href="#environmental-data-preparation" id="toc-environmental-data-preparation" class="nav-link" data-scroll-target="#environmental-data-preparation">1. Environmental Data Preparation</a></li>
-  <li><a href="#occurrence-data-preparation" id="toc-occurrence-data-preparation" class="nav-link" data-scroll-target="#occurrence-data-preparation">2. Occurrence Data Preparation</a></li>
+  <li><a href="#imbalanced-dataset" id="toc-imbalanced-dataset" class="nav-link" data-scroll-target="#imbalanced-dataset">2. Imbalanced dataset</a></li>
   <li><a href="#raster-processing" id="toc-raster-processing" class="nav-link" data-scroll-target="#raster-processing">3. Raster Processing</a></li>
   <li><a href="#data-cleaning-techniques" id="toc-data-cleaning-techniques" class="nav-link" data-scroll-target="#data-cleaning-techniques">4. Data Cleaning Techniques</a></li>
   </ul></li>
@@ -215,10 +215,10 @@ ul.task-list li input[type="checkbox"] {
 <p><a href="../notebooks/data_prep/raster_preparation.html">Environmental Data Preparation</a><br>
 This guide will help you prepare environmental variables such as bioclimatic data, land use, and others required for SDM.</p>
 </section>
-<section id="occurrence-data-preparation" class="level3">
-<h3 class="anchored" data-anchor-id="occurrence-data-preparation">2. Occurrence Data Preparation</h3>
-<p><a href="data_prep/occ_data_prep.qmd">Occurrence Data Preparation</a><br>
-Learn how to download, clean, and format occurrence data for your species of interest.</p>
+<section id="imbalanced-dataset" class="level3">
+<h3 class="anchored" data-anchor-id="imbalanced-dataset">2. Imbalanced dataset</h3>
+<p><a href="../notebooks/data_prep/imbalanced_data.html">Imbalanced dataset</a><br>
+Learn how to deal with the issue of imbalanced dataset.</p>
 </section>
 <section id="raster-processing" class="level3">
 <h3 class="anchored" data-anchor-id="raster-processing">3. Raster Processing</h3>
@@ -828,8 +828,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   });
   clipboard.on('success', onCopySuccess);
   if (window.document.getElementById('quarto-embedded-source-code-modal')) {
-    // For code content inside modals, clipBoardJS needs to be initialized with a container option
-    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
     const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
       text: getTextToCopy,
       container: window.document.getElementById('quarto-embedded-source-code-modal')
@@ -940,7 +938,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       if (window.Quarto?.typesetMath) {
         window.Quarto.typesetMath(note);
       }
-      // TODO in 1.5, we should make sure this works without a callout special case
       if (note.classList.contains("callout")) {
         return note.outerHTML;
       } else {

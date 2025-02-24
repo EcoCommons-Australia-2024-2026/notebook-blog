@@ -18,10 +18,10 @@ Below is a list of specific topics related to data preparation. Click on each li
 [Environmental Data Preparation](data_prep/raster_preparation.qmd)\
 This guide will help you prepare environmental variables such as bioclimatic data, land use, and others required for SDM.
 
-### 2. Occurrence Data Preparation
+### 2. Imbalanced dataset
 
-[Occurrence Data Preparation](data_prep/occ_data_prep.qmd)\
-Learn how to download, clean, and format occurrence data for your species of interest.
+[Imbalanced dataset](data_prep/imbalanced_data.qmd)\
+Learn how to deal with the issue of imbalanced dataset.
 
 ### 3. Raster Processing
 
